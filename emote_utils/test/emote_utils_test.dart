@@ -72,13 +72,30 @@ void main() {
       final Player bill = Player('Bill');
       final Player jane = Player('Jane');
 
-      final SocialContext<Player> ctx = socials.getStrings(s, <Player>[bill, jane]);
+      SocialContext<Player> ctx = socials.getStrings(s, <Player>[bill, jane]);
 
       expect(ctx.defaultString, 'Bill smiles at Jane.');
 
       expect(ctx.targetedStrings[bill], 'You smile at Jane.');
 
       expect(ctx.targetedStrings[jane], 'Bill smiles at you.');
+
+      const String invalidSuffixName = 'fails';
+      
+      expect(
+        () => socials.getStrings('%1$invalidSuffixName', <Player>[bill]),
+        throwsA(
+          predicate((NoSuchSuffixError e) => e.name == invalidSuffixName)
+        )
+      );
+
+      socials.addFilter(<String>['url'], url);
+
+      ctx = socials.getStrings('%1N|url', <Player>[bill]);
+
+      expect(ctx.defaultString, 'Bill.com');
+
+      expect(ctx.targetedStrings[bill], 'You.com');
     });
   });
 }
