@@ -80,12 +80,12 @@ void main() {
 
       expect(ctx.targetedStrings[jane], 'Bill smiles at you.');
 
-      const String invalidSuffixName = 'fails';
+      const String invalidName = 'fails';
       
       expect(
-        () => socials.getStrings('%1$invalidSuffixName', <Player>[bill]),
+        () => socials.getStrings('%1$invalidName', <Player>[bill]),
         throwsA(
-          predicate((NoSuchSuffixError e) => e.name == invalidSuffixName)
+          predicate((NoSuchSuffixError e) => e.name == invalidName)
         )
       );
 
@@ -96,6 +96,13 @@ void main() {
       expect(ctx.defaultString, 'Bill.com');
 
       expect(ctx.targetedStrings[bill], 'You.com');
+      
+      expect(
+        () => socials.getStrings('%1N|$invalidName', <Player>[jane]),
+        throwsA(
+          predicate<NoSuchFilterError>((NoSuchFilterError e) => e.name == invalidName)
+        )
+      );
     });
   });
 }
