@@ -8,7 +8,7 @@ import 'errors.dart';
 import 'social_context.dart';
 import 'suffix_result.dart';
 
-/// The main factory for storing suffixes, and converting social strings to strings which can be sent to objects of type T.
+/// The main factory for storing suffixes and filters, as well as converting social strings to perspective aware strings which can be sent to objects of type T.
 class SocialsFactory<T> {
   /// Default constructor.
   SocialsFactory();

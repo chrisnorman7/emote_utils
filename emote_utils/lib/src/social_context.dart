@@ -3,7 +3,7 @@ library social_context;
 
 import 'emote_utils_base.dart';
 
-/// The result of calling [SocialsFactory.getStrings].
+/// Returned by [SocialsFactory.getStrings].
 class SocialContext<T> {
   SocialContext(this.targetedStrings, this.defaultString);
 

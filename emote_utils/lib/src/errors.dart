@@ -37,6 +37,7 @@ class NoSuchSuffixError extends Error {
   String toString() => 'There is no suffix named "$name".';
 }
 
+/// Thrown when attempting to use a filter that does not exist.
 class NoSuchFilterError{
   NoSuchFilterError(this.name);
 
