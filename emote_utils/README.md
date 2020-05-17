@@ -1,4 +1,4 @@
-A library for working with emotes in text-based games, such as MOO.
+A library for working with emote strings in text-based games, such as MOO.
 
 ## Usage
 
