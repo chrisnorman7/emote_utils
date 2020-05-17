@@ -10,6 +10,18 @@ import 'suffix_result.dart';
 
 /// The main factory for storing suffixes, and converting social strings to strings which can be sent to objects of type T.
 class SocialsFactory<T> {
+  /// Default constructor.
+  SocialsFactory();
+
+  /// Create a factory with a couple of useful suffixes.
+  SocialsFactory.sensible() {
+    addSuffix(<String>['s'], (T thing) => SuffixResult('', 's'));
+    addSuffix(<String>['es'], (T thing) => SuffixResult('', 'es'));
+    addSuffix(<String>['y', 'ies'], (T thing) => SuffixResult('y', 'ies'));
+    addSuffix(<String>['are', 'is'], (T thing) => SuffixResult('are', 'is'));
+    addSuffix(<String>['have', 'has'], (T thing) => SuffixResult('have', 'has'));
+  }
+
   /// The default suffix.
   String defaultSuffix = 'n';
 

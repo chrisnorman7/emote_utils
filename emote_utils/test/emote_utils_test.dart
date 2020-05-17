@@ -79,7 +79,7 @@ void main() {
       expect(ctx.targetedStrings[bill], 'You smile at Jane.');
 
       expect(ctx.targetedStrings[jane], 'Bill smiles at you.');
-      
+
       expect(
         () => socials.getStrings('%2', <Player>[jane]),
         throwsA(
@@ -88,7 +88,7 @@ void main() {
       );
 
       const String invalidName = 'fails';
-      
+
       expect(
         () => socials.getStrings('%1$invalidName', <Player>[bill]),
         throwsA(
@@ -103,13 +103,52 @@ void main() {
       expect(ctx.defaultString, 'Bill.com');
 
       expect(ctx.targetedStrings[bill], 'You.com');
-      
+
       expect(
         () => socials.getStrings('%1N|$invalidName', <Player>[jane]),
         throwsA(
           predicate<NoSuchFilterError>((NoSuchFilterError e) => e.name == invalidName)
         )
       );
+    });
+  });
+
+  group('Tests for SocialsFactory.sensible', () {
+    SocialsFactory<Player> f;
+    SocialContext<Player> ctx;
+
+    setUp(() =>f = SocialsFactory<Player>.sensible());
+    final Player p = Player('Someone');
+    final List<Player> pl = <Player>[p];
+
+    test('%s', () {
+      ctx = f.getStrings('smile%s', pl);
+      expect(ctx.targetedStrings[p], 'smile');
+      expect(ctx.defaultString, 'smiles');
+    });
+
+    test('%es', () {
+      ctx = f.getStrings('punch%es', pl);
+      expect (ctx.targetedStrings[p], 'punch');
+      expect(ctx.defaultString, 'punches');
+    });
+
+    test('%y', () {
+      ctx = f.getStrings('fl%y', pl);
+      expect(ctx.targetedStrings[p], 'fly');
+      expect(ctx.defaultString, 'flies');
+    });
+
+    test('%are', () {
+      ctx = f.getStrings('%are', pl);
+      expect(ctx.targetedStrings[p], 'are');
+      expect(ctx.defaultString, 'is');
+    });
+
+    test('%have', () {
+      ctx = f.getStrings('%have', pl);
+      expect(ctx.targetedStrings[p], 'have');
+      expect(ctx.defaultString, 'has');
     });
   });
 }
