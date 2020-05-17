@@ -16,7 +16,7 @@ void main() {
   final Player jane = Player('Jane');
   // Create a socials factory, bound to the Player type.
   //
-  // The SocialsFactory.sensible constructor gives you some reasonable defaults (at least for english), ensuring that word endings like "y", "es", and "s" work as expected.
+  // The SocialsFactory.sensible constructor gives you some reasonable defaults (at least in english), ensuring that word endings like "y", "es", and "s" work as expected.
   final SocialsFactory<Player> f = SocialsFactory<Player>.sensible();
   // Add a suffix, to give us player names.
   f.addSuffix(<String>['n'], (Player p) => SuffixResult('you', p.name));
