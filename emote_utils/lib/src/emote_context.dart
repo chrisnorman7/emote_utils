@@ -1,8 +1,7 @@
 /// Provides the [EmoteContext] class.
 library emote_context;
 
-
-/// Returned by [SocialsContext.convertEmoteString].
+/// Returned by [SocialsFactory.convertEmoteString].
 class EmoteContext<T> {
   /// Create a context whose members can be used by [SocialsFactory.getStrings].
   EmoteContext(this.socialString, this.perspectives);

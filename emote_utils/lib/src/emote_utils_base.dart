@@ -163,6 +163,29 @@ class SocialsFactory<T> {
     return SocialContext<T>(targetedStrings, defaultString);
   }
 
+  /// Used to convert emote strings entered by players to social strings.
+  ///
+  /// Using [objectRegExp], convert a string such as `%1N smile%1s at [bob].`, to the social string `%1N smile%1s at %2.`, as well as creating a list of T instances, where [actor] is the first, and any other matches follow.
+  ///
+  /// In the case of the example above, assuming Mary used the emote, the perspectives list would be `[mary, bob]`.
+  ///
+  /// Every time a match string is found (according to the [objectRegExp] regular expression), it is passed through [matchFunc], which should return a T instance.
+  ///
+  /// If the match fails for any reason, throw some kind of error which you can catch in your code.
+  ///
+  /// ```
+  /// try {
+  ///   final EmoteContext<Player> ctx = socialsFactory.convertEmoteString(emoteString, player, (String name) {
+  ///     final Player match = player.match(name);
+  ///     if (match == null) throw 'You see no $name here.';
+  ///     return match;
+  ///   });
+  ///   socialsFactory.getStrings(ctx.socialString, ctx.perspectives).dispatch(...);
+  /// }
+  /// catch(e) {
+  ///   player.message(e);
+  /// }
+  /// ```
   EmoteContext<T> convertEmoteString(String emoteString, T actor, T Function(String) matchFunc) {
     final List<T> perspectives = <T>[actor];
     final String socialString = emoteString.replaceAllMapped(objectRegExp, (Match m) {
