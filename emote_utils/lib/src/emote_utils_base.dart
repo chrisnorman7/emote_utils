@@ -4,6 +4,7 @@
 library emote_utils_base;
 
 import 'constants.dart';
+import 'emote_context.dart';
 import 'errors.dart';
 import 'social_context.dart';
 import 'suffix_result.dart';
@@ -160,5 +161,21 @@ class SocialsFactory<T> {
       return result.secondPerson;
     });
     return SocialContext<T>(targetedStrings, defaultString);
+  }
+
+  EmoteContext<T> convertEmoteString(String emoteString, T actor, T Function(String) matchFunc) {
+    final List<T> perspectives = <T>[actor];
+    final String socialString = emoteString.replaceAllMapped(objectRegExp, (Match m) {
+      final T perspective = matchFunc(m.group(1));
+      int index;
+      if (perspectives.contains(perspective)) {
+        index = perspectives.indexOf(perspective);
+      } else {
+        perspectives.add(perspective);
+        index = perspectives.length;
+      }
+      return '%$index';
+    });
+    return EmoteContext<T>(socialString, perspectives);
   }
 }

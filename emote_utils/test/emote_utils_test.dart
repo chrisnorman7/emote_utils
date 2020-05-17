@@ -27,6 +27,27 @@ class Player {
   void message(String message) => messages.add(message);
 }
 
+/// A pretend match function.
+Player matchPlayer(String name) {
+  switch(name) {
+    case 'jane':
+      return jane;
+      break;
+    case 'bill':
+      return bill;
+      break;
+    case 'ben':
+      return ben;
+      break;
+    default:
+      throw name;
+  }
+}
+
+final Player bill = Player('Bill');
+final Player ben = Player('Ben');
+final Player jane = Player('Jane');
+
 void main() {
   group('Tests for SocialsFactory', () {
     SocialsFactory<Player> socials;
@@ -69,9 +90,6 @@ void main() {
       socials.addSuffix(<String>['s'], getS);
 
       const String s = '%1N smile%s at %2.';
-      final Player bill = Player('Bill');
-      final Player jane = Player('Jane');
-
       SocialContext<Player> ctx = socials.getStrings(s, <Player>[bill, jane]);
 
       expect(ctx.defaultString, 'Bill smiles at Jane.');
@@ -155,10 +173,6 @@ void main() {
   group('Test SocialContext.dispatch', () {
     SocialsFactory<Player> f;
 
-    final Player bill = Player('Bill');
-    final Player ben = Player('Ben');
-    final Player jane = Player('Jane');
-
     setUp(() {
       f = SocialsFactory<Player>.sensible();
       f.addSuffix(<String>['n'], (Player p) => SuffixResult('you', p.name));
@@ -172,6 +186,27 @@ void main() {
       expect(bill.messages.last, 'Jane punches you.');
       expect(jane.messages.last, 'You punch Bill.');
       expect(ben.messages.last, 'Jane punches Bill.');
+    });
+  });
+
+  group('Test emote strings', () {
+    SocialsFactory<Player> f;
+
+    setUp(() => f = SocialsFactory<Player>());
+
+    test('Convert emote strings', () {
+      final EmoteContext<Player> ctx = f.convertEmoteString('%1N smile%1s at [jane].', bill, matchPlayer);
+      expect(ctx.socialString, '%1N smile%1s at %2.');
+      expect(ctx.perspectives, <Player>[bill, jane]);
+    });
+
+    test('Throw an error if an invalid name is used', () {
+      expect(
+        () => f.convertEmoteString('%1N smile%1s at [nobody].', jane, matchPlayer),
+        throwsA(
+          predicate<String>((String s) => s == 'nobody')
+        )
+      );
     });
   });
 }

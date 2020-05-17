@@ -52,6 +52,7 @@
 library emote_utils;
 
 export 'src/constants.dart';
+export 'src/emote_context.dart';
 export 'src/emote_utils_base.dart';
 export 'src/errors.dart';
 export 'src/social_context.dart';

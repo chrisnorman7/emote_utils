@@ -13,4 +13,4 @@ typedef FilterType = String Function(String);
 final RegExp defaultSuffixRegExp = RegExp(r'%([0-9]*)([a-zA-Z]*)([|]([a-zA-Z]+))?');
 
 /// The regular expression used for matching objects in emote strings.
-final RegExp defaultObjectRegExp = RegExp(r'\{([^}]+)}');
+final RegExp defaultObjectRegExp = RegExp(r'\[([^\]]+)\]');
