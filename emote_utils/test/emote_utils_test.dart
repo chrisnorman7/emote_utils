@@ -79,6 +79,13 @@ void main() {
       expect(ctx.targetedStrings[bill], 'You smile at Jane.');
 
       expect(ctx.targetedStrings[jane], 'Bill smiles at you.');
+      
+      expect(
+        () => socials.getStrings('%2', <Player>[jane]),
+        throwsA(
+          predicate<NoSuchIndexError>((NoSuchIndexError e) => e.index == 2 && e.length == 1)
+        )
+      );
 
       const String invalidName = 'fails';
       
