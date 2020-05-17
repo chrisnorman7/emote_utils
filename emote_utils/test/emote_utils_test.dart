@@ -151,4 +151,27 @@ void main() {
       expect(ctx.defaultString, 'has');
     });
   });
+
+  group('Test SocialContext.dispatch', () {
+    SocialsFactory<Player> f;
+
+    final Player bill = Player('Bill');
+    final Player ben = Player('Ben');
+    final Player jane = Player('Jane');
+
+    setUp(() {
+      f = SocialsFactory<Player>.sensible();
+      f.addSuffix(<String>['n'], (Player p) => SuffixResult('you', p.name));
+    });
+
+    test('Ensure everyone gets the right message.', () {
+      final SocialContext<Player> ctx = f.getStrings('%N punch%es %2.', <Player>[jane, bill]);
+      ctx.dispatch(
+        <Player>[bill, ben, jane], (Player p, String message) => p.message(message)
+      );
+      expect(bill.messages.last, 'Jane punches you.');
+      expect(jane.messages.last, 'You punch Bill.');
+      expect(ben.messages.last, 'Jane punches Bill.');
+    });
+  });
 }
