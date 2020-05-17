@@ -39,4 +39,4 @@ void main() {
 
 ## Features and bugs
 
-Please file feature requests and bugs at the [issue tracker](https://github.com/chrisnorman7/emote_utils).
+Please file feature requests and bugs at the [issue tracker](https://github.com/chrisnorman7/emote_utils/issues).
