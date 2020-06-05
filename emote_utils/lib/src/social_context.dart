@@ -22,10 +22,7 @@ class SocialContext<T> {
   /// The [func] argument should pass the given string to the given observer.
   void dispatch(List<T> observers, void Function(T, String) func) {
     for (final T observer in observers) {
-      String value = defaultString;
-      if (targetedStrings.containsKey(observer)) {
-        value = targetedStrings[observer];
-      }
+      final String value = targetedStrings[observer] ?? defaultString;
       func(observer, value);
     }
   }
