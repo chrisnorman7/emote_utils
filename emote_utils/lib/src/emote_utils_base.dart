@@ -17,7 +17,7 @@ class SocialsFactory<T> {
   /// Create a factory with a couple of useful suffixes.
   SocialsFactory.sensible() {
     addSuffix(<String>['s'], (T thing) => SuffixResult('', 's'));
-    addSuffix(<String>['es'], (T thing) => SuffixResult('', 'es'));
+    addSuffix(<String>['e', 'es'], (T thing) => SuffixResult('', 'es'));
     addSuffix(<String>['y', 'ies'], (T thing) => SuffixResult('y', 'ies'));
     addSuffix(<String>['are', 'is'], (T thing) => SuffixResult('are', 'is'));
     addSuffix(<String>['have', 'has'], (T thing) => SuffixResult('have', 'has'));

@@ -1,3 +1,5 @@
+# Changelog
+
 ## 1.0.0
 
 - Initial version, created by Stagehand
@@ -21,3 +23,7 @@ Updated version because I've done something strange.
 ## 2.0.1
 
 Make code more concise.
+
+## 2.0.2
+
+Added "e" as an alias for the "es" suffix.
