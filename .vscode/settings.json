@@ -1,0 +1,16 @@
+{
+  "[dart]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "cSpell.words": [
+    "analyzer",
+    "ctx",
+    "formals",
+    "ies",
+    "touppercase",
+    "typedefs"
+  ],
+  "cSpell.enabled": true,
+}

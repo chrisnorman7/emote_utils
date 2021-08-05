@@ -1,13 +1,10 @@
 name: emote_utils
 description: Emote utilities for text-based games.
-version: 2.0.2
+version: 2.1.0
 homepage: https://github.com/chrisnorman7/emote_utils
 
 environment:
-  sdk: '>=2.8.4 <3.0.0'
-
-#dependencies:
-#  path:
+  sdk: ">=2.13.0 <3.0.0"
 
 dev_dependencies:
   pedantic:

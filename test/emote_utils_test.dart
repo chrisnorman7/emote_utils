@@ -29,17 +29,15 @@ class Player {
 
 /// A pretend match function.
 Player matchPlayer(String name) {
-  switch(name) {
+  switch (name) {
     case 'jane':
       return jane;
-      break;
     case 'bill':
       return bill;
-      break;
     case 'ben':
       return ben;
-      break;
     default:
+      // ignore: only_throw_errors
       throw name;
   }
 }
@@ -50,11 +48,9 @@ final Player jane = Player('Jane');
 
 void main() {
   group('Tests for SocialsFactory', () {
-    SocialsFactory<Player> socials;
+    late SocialsFactory<Player> socials;
 
-    setUp(() {
-      socials = SocialsFactory<Player>();
-    });
+    setUp(() => socials = SocialsFactory<Player>());
 
     test('default suffixes', () {
       expect(socials.suffixes.length, 0);
@@ -86,8 +82,9 @@ void main() {
     });
 
     test('getStrings', () {
-      socials.addSuffix(<String>['n'], getName);
-      socials.addSuffix(<String>['s'], getS);
+      socials
+        ..addSuffix(<String>['n'], getName)
+        ..addSuffix(<String>['s'], getS);
 
       const String s = '%1N smile%s at %2.';
       SocialContext<Player> ctx = socials.getStrings(s, <Player>[bill, jane]);
@@ -99,20 +96,14 @@ void main() {
       expect(ctx.targetedStrings[jane], 'Bill smiles at you.');
 
       expect(
-        () => socials.getStrings('%2', <Player>[jane]),
-        throwsA(
-          predicate<NoSuchIndexError>((NoSuchIndexError e) => e.index == 2 && e.length == 1)
-        )
-      );
+          () => socials.getStrings('%2', <Player>[jane]),
+          throwsA(predicate<NoSuchIndexError>(
+              (NoSuchIndexError e) => e.index == 2 && e.length == 1)));
 
       const String invalidName = 'fails';
 
-      expect(
-        () => socials.getStrings('%1$invalidName', <Player>[bill]),
-        throwsA(
-          predicate((NoSuchSuffixError e) => e.name == invalidName)
-        )
-      );
+      expect(() => socials.getStrings('%1$invalidName', <Player>[bill]),
+          throwsA(predicate((NoSuchSuffixError e) => e.name == invalidName)));
 
       socials.addFilter(<String>['url'], url);
 
@@ -123,19 +114,16 @@ void main() {
       expect(ctx.targetedStrings[bill], 'You.com');
 
       expect(
-        () => socials.getStrings('%1N|$invalidName', <Player>[jane]),
-        throwsA(
-          predicate<NoSuchFilterError>((NoSuchFilterError e) => e.name == invalidName)
-        )
-      );
+          () => socials.getStrings('%1N|$invalidName', <Player>[jane]),
+          throwsA(predicate<NoSuchFilter>(
+              (NoSuchFilter e) => e.name == invalidName)));
     });
   });
 
   group('Tests for SocialsFactory.sensible', () {
-    SocialsFactory<Player> f;
+    final f = SocialsFactory<Player>.sensible();
     SocialContext<Player> ctx;
 
-    setUp(() =>f = SocialsFactory<Player>.sensible());
     final Player p = Player('Someone');
     final List<Player> pl = <Player>[p];
 
@@ -147,7 +135,7 @@ void main() {
 
     test('%es', () {
       ctx = f.getStrings('punch%es', pl);
-      expect (ctx.targetedStrings[p], 'punch');
+      expect(ctx.targetedStrings[p], 'punch');
       expect(ctx.defaultString, 'punches');
     });
 
@@ -171,18 +159,17 @@ void main() {
   });
 
   group('Test SocialContext.dispatch', () {
-    SocialsFactory<Player> f;
+    late final SocialsFactory<Player> f;
 
     setUp(() {
-      f = SocialsFactory<Player>.sensible();
-      f.addSuffix(<String>['n'], (Player p) => SuffixResult('you', p.name));
+      f = SocialsFactory<Player>.sensible()
+        ..addSuffix(<String>['n'], (Player p) => SuffixResult('you', p.name));
     });
 
     test('Ensure everyone gets the right message.', () {
-      final SocialContext<Player> ctx = f.getStrings('%N punch%es %2.', <Player>[jane, bill]);
-      ctx.dispatch(
-        <Player>[bill, ben, jane], (Player p, String message) => p.message(message)
-      );
+      f.getStrings('%N punch%es %2.', <Player>[jane, bill])
+        ..dispatch(<Player>[bill, ben, jane],
+            (Player p, String message) => p.message(message));
       expect(bill.messages.last, 'Jane punches you.');
       expect(jane.messages.last, 'You punch Bill.');
       expect(ben.messages.last, 'Jane punches Bill.');
@@ -190,23 +177,20 @@ void main() {
   });
 
   group('Test emote strings', () {
-    SocialsFactory<Player> f;
-
-    setUp(() => f = SocialsFactory<Player>());
+    final f = SocialsFactory<Player>();
 
     test('Convert emote strings', () {
-      final EmoteContext<Player> ctx = f.convertEmoteString('%1N smile%1s at [jane].', bill, matchPlayer);
+      final EmoteContext<Player> ctx =
+          f.convertEmoteString('%1N smile%1s at [jane].', bill, matchPlayer);
       expect(ctx.socialString, '%1N smile%1s at %2.');
       expect(ctx.perspectives, <Player>[bill, jane]);
     });
 
     test('Throw an error if an invalid name is used', () {
       expect(
-        () => f.convertEmoteString('%1N smile%1s at [nobody].', jane, matchPlayer),
-        throwsA(
-          predicate<String>((String s) => s == 'nobody')
-        )
-      );
+          () => f.convertEmoteString(
+              '%1N smile%1s at [nobody].', jane, matchPlayer),
+          throwsA(predicate<String>((String s) => s == 'nobody')));
     });
   });
 }
