@@ -1,4 +1,3 @@
-/// Provides the [SocialsFactory] class.
 import 'emote_context.dart';
 import 'errors.dart';
 import 'social_context.dart';
@@ -10,30 +9,39 @@ import 'typedefs.dart';
 /// type T.
 class SocialsFactory<T> {
   /// Default constructor.
-  SocialsFactory(
-      {this.defaultSuffix = 'n',
-      this.defaultIndex = '1',
-      RegExp? suffixRegExp,
-      RegExp? objectRegExp,
-      RegExp? wordRegExp,
-      RegExp? upperCaseRegExp})
-      : this.suffixRegExp =
+  SocialsFactory({
+    this.defaultSuffix = 'n',
+    this.defaultIndex = '1',
+    final RegExp? suffixRegExp,
+    RegExp? objectRegExp,
+    final RegExp? wordRegExp,
+    final RegExp? upperCaseRegExp,
+  })  : this.suffixRegExp =
             suffixRegExp ?? RegExp('%([0-9]*)([a-zA-Z]*)([|]([a-zA-Z]+))?'),
         this.objectRegExp = objectRegExp ??= RegExp(r'\[([^\]]+)\]'),
         this.wordRegExp = wordRegExp ?? RegExp(r'\S+\s*'),
         this.upperCaseRegExp = upperCaseRegExp ?? RegExp('[A-Z]');
 
   /// Create a factory with a couple of useful suffixes.
-  factory SocialsFactory.sensible(
-      {String defaultSuffix = 'n', String defaultIndex = '1'}) {
+  factory SocialsFactory.sensible({
+    final String defaultSuffix = 'n',
+    final String defaultIndex = '1',
+  }) {
     final factory = SocialsFactory<T>(
-        defaultSuffix: defaultSuffix, defaultIndex: defaultIndex)
-      ..addSuffix(<String>['s'], (T thing) => SuffixResult('', 's'))
-      ..addSuffix(<String>['e', 'es'], (T thing) => SuffixResult('', 'es'))
-      ..addSuffix(<String>['y', 'ies'], (T thing) => SuffixResult('y', 'ies'))
-      ..addSuffix(<String>['are', 'is'], (T thing) => SuffixResult('are', 'is'))
+      defaultSuffix: defaultSuffix,
+      defaultIndex: defaultIndex,
+    )
+      ..addSuffix(['s'], (final thing) => const SuffixResult('', 's'))
+      ..addSuffix(['e', 'es'], (final thing) => const SuffixResult('', 'es'))
+      ..addSuffix(['y', 'ies'], (final thing) => const SuffixResult('y', 'ies'))
       ..addSuffix(
-          <String>['have', 'has'], (T thing) => SuffixResult('have', 'has'));
+        ['are', 'is'],
+        (final thing) => const SuffixResult('are', 'is'),
+      )
+      ..addSuffix(
+        ['have', 'has'],
+        (final thing) => const SuffixResult('have', 'has'),
+      );
     return factory;
   }
 
@@ -72,17 +80,15 @@ class SocialsFactory<T> {
   ///
   /// To modify the behaviour of this function, either override this function,
   /// or set [upperCaseRegExp] to something else.
-  bool startsAsUpperCase(String value) => value.startsWith(upperCaseRegExp);
+  bool startsAsUpperCase(final String value) =>
+      value.startsWith(upperCaseRegExp);
 
   /// Returns a string with the first letter of each word capitalised.
-  String toTitleCase(String s) {
-    final words = [
-      for (final word in s.split(' '))
-        word.length == 1
-            ? word[0].toUpperCase()
-            : '${word[0].toUpperCase()}${word.substring(1)}'
-    ];
-    return words.join(' ');
+  String toTitleCase(final String s) {
+    if (s.isEmpty) {
+      return s;
+    }
+    return '${s.substring(0, 1).toUpperCase()}${s.substring(1)}';
   }
 
   /// Add a suffix.
@@ -98,10 +104,13 @@ class SocialsFactory<T> {
   /// socials.addSuffix(
   ///   <String>['name', 'n'], (Player p) => SuffixResult('you', player.name));
   /// ```
-  void addSuffix(List<String> names, SuffixResult Function(T) func) {
-    for (final String name in names) {
+  void addSuffix(
+    final List<String> names,
+    final SuffixResult Function(T) func,
+  ) {
+    for (final name in names) {
       if (suffixes.containsKey(name)) {
-        throw DuplicateNameError(name);
+        throw DuplicateNameError(name: name);
       }
       suffixes[name] = func;
     }
@@ -113,10 +122,10 @@ class SocialsFactory<T> {
   ///   <String>['upper', 'uppercase', 'touppercase'], (String value) =>
   ///     value.toUpperCase());
   /// ```
-  void addFilter(List<String> names, String Function(String) func) {
-    for (final String name in names) {
+  void addFilter(final List<String> names, final String Function(String) func) {
+    for (final name in names) {
       if (filters.containsKey(name)) {
-        throw DuplicateNameError(name);
+        throw DuplicateNameError(name: name);
       }
       filters[name] = func;
     }
@@ -139,45 +148,46 @@ class SocialsFactory<T> {
   ///
   /// Make the suffix names upper case to have the strings rendered with their
   /// first letter capitalised.
-  SocialContext<T> getStrings(String socialString, List<T> perspectives) {
-    final Map<T, String> targetedStrings = <T, String>{
-      for (final perspective in perspectives) perspective: socialString
+  SocialContext<T> getStrings(
+    final String socialString,
+    final List<T> perspectives,
+  ) {
+    final targetedStrings = <T, String>{
+      for (final perspective in perspectives) perspective: socialString,
     };
-    final String defaultString =
-        socialString.replaceAllMapped(suffixRegExp, (Match m) {
-      final fullString = m.group(0);
-      if (fullString == null) {
-        throw Exception('RegExp group(0) returned null.');
-      }
+    final defaultString =
+        socialString.replaceAllMapped(suffixRegExp, (final m) {
+      final fullString = m.group(0)!;
       var indexString = m.group(1);
       if (indexString == null || indexString.isEmpty) {
         indexString = defaultIndex;
       }
-      final int index = int.parse(indexString);
+      final index = int.parse(indexString);
       if (index > perspectives.length || index < 1) {
-        throw NoSuchIndexError(index, perspectives.length);
+        throw NoSuchIndexError(index: index, maxIndex: perspectives.length);
       }
-      final T perspective = perspectives[index - 1];
+      final perspective = perspectives[index - 1];
       var suffixName = m.group(2);
       if (suffixName == null || suffixName.isEmpty) {
         suffixName = defaultSuffix;
       }
-      final suffix = suffixes[suffixName.toLowerCase()];
+      final suffixNameLowerCase = suffixName.toLowerCase();
+      final suffix = suffixes[suffixNameLowerCase];
       if (suffix == null) {
-        throw NoSuchSuffixError(suffixName.toLowerCase());
+        throw NoSuchSuffixError(name: suffixNameLowerCase);
       }
-      final SuffixResult result = suffix(perspective);
+      var result = suffix(perspective);
       var filterName = m.group(3);
       if (filterName != null) {
         filterName = filterName.substring(1);
         final filter = filters[filterName];
         if (filter == null) {
-          throw NoSuchFilter(filterName);
+          throw NoSuchFilter(name: filterName);
         }
-        result.applyFilter(filter);
+        result = result.applyFilter(filter);
       }
       if (startsAsUpperCase(suffixName)) {
-        result.applyFilter(toTitleCase);
+        result = result.applyFilter(toTitleCase);
       }
       for (final entry in targetedStrings.entries) {
         final p = entry.key;
@@ -230,10 +240,12 @@ class SocialsFactory<T> {
   /// }
   /// ```
   EmoteContext<T> convertEmoteString(
-      String emoteString, T actor, T Function(String) matchFunc) {
-    final List<T> perspectives = <T>[actor];
-    final String socialString =
-        emoteString.replaceAllMapped(objectRegExp, (Match m) {
+    final String emoteString,
+    final T actor,
+    final T Function(String) matchFunc,
+  ) {
+    final perspectives = <T>[actor];
+    final socialString = emoteString.replaceAllMapped(objectRegExp, (final m) {
       final objectName = m.group(1);
       if (objectName == null) {
         throw Exception('Object name is null.');

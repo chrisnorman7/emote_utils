@@ -1,5 +1,4 @@
 /// Provides the [SuffixResult] class.
-import 'socials_factory.dart';
 import 'typedefs.dart';
 
 /// Returned by suffix functions.
@@ -15,19 +14,19 @@ class SuffixResult {
   /// socials.addSuffix(
   ///   <String>['name', 'n'], (Player p) => SuffixResult('you', p.name));
   /// ```
-  SuffixResult(this.firstPerson, this.secondPerson);
+  const SuffixResult(this.firstPerson, this.secondPerson);
 
   /// The string which should be sent to the object which initiated the social
   /// string.
-  String firstPerson;
+  final String firstPerson;
 
   /// The string which should be sent to all observers who didn't initiate the
   /// social string.
-  String secondPerson;
+  final String secondPerson;
 
-  /// Apply a filter to [firstPerson] and [secondPerson].
+  /// Apply [filter] to [firstPerson] and [secondPerson] and return the result.
   ///
-  /// This is used by [SocialsFactory.getStrings] to change the case of the
+  /// This is used by `SocialsFactory.getStrings` to change the case of the
   /// output.
   ///
   /// You can also use filters in your social strings, by placing a vertical bar
@@ -38,8 +37,6 @@ class SuffixResult {
   /// ```
   /// %1homepage|url
   /// ```
-  void applyFilter(FilterType filter) {
-    firstPerson = filter(firstPerson);
-    secondPerson = filter(secondPerson);
-  }
+  SuffixResult applyFilter(final FilterType filter) =>
+      SuffixResult(filter(firstPerson), filter(secondPerson));
 }
