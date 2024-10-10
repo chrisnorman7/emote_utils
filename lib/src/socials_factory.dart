@@ -242,7 +242,7 @@ class SocialsFactory<T> {
   EmoteContext<T> convertEmoteString(
     final String emoteString,
     final T actor,
-    final T Function(String) matchFunc,
+    final T Function(String match) matchFunc,
   ) {
     final perspectives = <T>[actor];
     final socialString = emoteString.replaceAllMapped(objectRegExp, (final m) {
