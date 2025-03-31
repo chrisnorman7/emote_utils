@@ -1,8 +1,4 @@
-import 'emote_context.dart';
-import 'errors.dart';
-import 'social_context.dart';
-import 'suffix_result.dart';
-import 'typedefs.dart';
+import 'package:emote_utils/emote_utils.dart';
 
 /// The main factory for storing suffixes and filters, as well as converting
 /// social strings to perspective aware strings which can be sent to objects of
@@ -16,11 +12,11 @@ class SocialsFactory<T> {
     RegExp? objectRegExp,
     final RegExp? wordRegExp,
     final RegExp? upperCaseRegExp,
-  })  : this.suffixRegExp =
+  })  : suffixRegExp =
             suffixRegExp ?? RegExp('%([0-9]*)([a-zA-Z]*)([|]([a-zA-Z]+))?'),
-        this.objectRegExp = objectRegExp ??= RegExp(r'\[([^\]]+)\]'),
-        this.wordRegExp = wordRegExp ?? RegExp(r'\S+\s*'),
-        this.upperCaseRegExp = upperCaseRegExp ?? RegExp('[A-Z]');
+        objectRegExp = objectRegExp ??= RegExp(r'\[([^\]]+)\]'),
+        wordRegExp = wordRegExp ?? RegExp(r'\S+\s*'),
+        upperCaseRegExp = upperCaseRegExp ?? RegExp('[A-Z]');
 
   /// Create a factory with a couple of useful suffixes.
   factory SocialsFactory.sensible({

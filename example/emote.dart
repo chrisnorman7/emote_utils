@@ -1,5 +1,5 @@
 /// An example showing how emotes are possible.
-library emote;
+library;
 
 import 'package:emote_utils/emote_utils.dart';
 
@@ -37,12 +37,13 @@ class Player {
       this,
       matchPlayer,
     );
-    factory.getStrings(emoteContext.socialString, emoteContext.perspectives)
-      ..dispatch(
-        players.values.toList(),
-        // ignore: avoid_print
-        (final p, final message) => print('${p.name} sees: $message'),
-      );
+    factory
+        .getStrings(emoteContext.socialString, emoteContext.perspectives)
+        .dispatch(
+          players.values.toList(),
+          // ignore: avoid_print
+          (final p, final message) => print('${p.name} sees: $message'),
+        );
   }
 }
 

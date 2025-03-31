@@ -1,7 +1,4 @@
-/// Provides the [SocialContext] class.
-library social_context;
-
-import 'socials_factory.dart';
+import 'package:emote_utils/emote_utils.dart';
 
 /// Returned by [SocialsFactory.getStrings].
 class SocialContext<T> {

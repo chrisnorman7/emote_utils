@@ -70,10 +70,10 @@
 ///
 /// To begin with a factory that has some sensible suffixes already in place,
 /// use the [SocialsFactory.sensible] constructor.
-library emote_utils;
+library;
 
-import 'src/errors.dart';
-import 'src/socials_factory.dart';
+import 'package:emote_utils/src/errors.dart';
+import 'package:emote_utils/src/socials_factory.dart';
 
 export 'src/emote_context.dart';
 export 'src/errors.dart';

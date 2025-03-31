@@ -1,5 +1,4 @@
-/// Provides the [SuffixResult] class.
-import 'typedefs.dart';
+import 'package:emote_utils/emote_utils.dart';
 
 /// Returned by suffix functions.
 ///

@@ -1,6 +1,6 @@
 name: emote_utils
-description: Emote utilities for text-based games.
 version: 2.2.0
+description: Emote utilities for text-based games.
 homepage: https://github.com/chrisnorman7/emote_utils
 
 environment:

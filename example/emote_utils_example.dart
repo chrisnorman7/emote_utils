@@ -24,10 +24,11 @@ void main() {
     ..addSuffix(<String>['n'], (final p) => SuffixResult('you', p.name));
   // Generate some strings.
   f.getStrings('%1N punch%1es %2n.', [jane, bill])
-    // We could go through and send them all out by hand, but we can do better:
-    ..dispatch(
-      [bill, ben, jane],
-      // ignore: avoid_print
-      (final p, final s) => print('${p.name} sees: $s'),
-    );
+      // We could go through and send them all out by hand, but we can do
+      // better:
+      .dispatch(
+    [bill, ben, jane],
+    // ignore: avoid_print
+    (final p, final s) => print('${p.name} sees: $s'),
+  );
 }

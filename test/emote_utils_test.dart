@@ -1,6 +1,3 @@
-/// emote_util tests.
-library emote_utils_test;
-
 import 'package:emote_utils/emote_utils.dart';
 import 'package:test/test.dart';
 
@@ -181,11 +178,10 @@ void main() {
     });
 
     test('Ensure everyone gets the right message.', () {
-      f.getStrings('%N punch%es %2.', [jane, bill])
-        ..dispatch(
-          [bill, ben, jane],
-          (final p, final message) => p.message(message),
-        );
+      f.getStrings('%N punch%es %2.', [jane, bill]).dispatch(
+        [bill, ben, jane],
+        (final p, final message) => p.message(message),
+      );
       expect(bill.messages.last, 'Jane punches you.');
       expect(jane.messages.last, 'You punch Bill.');
       expect(ben.messages.last, 'Jane punches Bill.');

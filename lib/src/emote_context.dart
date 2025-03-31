@@ -1,5 +1,4 @@
-/// Provides the [EmoteContext] class.
-import 'socials_factory.dart';
+import 'package:emote_utils/emote_utils.dart';
 
 /// Returned by [SocialsFactory.convertEmoteString].
 class EmoteContext<T> {

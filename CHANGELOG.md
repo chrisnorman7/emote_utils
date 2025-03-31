@@ -1,7 +1,9 @@
 # Changelog
 
+## [2.2.0]
+
+- Updated code.
+
 ## [2.1.0]
 
-### Changed
-
-* Updated code to be null safe.
+- Updated code to be null safe.
